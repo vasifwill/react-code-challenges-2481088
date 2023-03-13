@@ -4,9 +4,17 @@ import { useEffect, useState } from "react"
 export default function DogPics () {
   const [dogs, setDogs] = useState('')
   const [button, setButton] = useState(false)
-  // API: https://dog.ceo/dog-api/
-  //https://dog.ceo/api/breeds/image/random
-  //"https://images.dog.ceo/breeds/bulldog-boston/n02096585_4575.jpg"
+ 
+
+  // const handleClick = aync() => {
+  //   const response = await fetch("https://dog.ceo/api/breeds/image/random")
+  //   const dog = response.json()
+  //   return dog.message
+  // }
+
+  // useEffect(() => {
+  //   handleClick().then(res => setDogs(res))
+  // },[])
 
   const handleClick = async() => {
     await axios.get("https://dog.ceo/api/breeds/image/random").then((res) => {
