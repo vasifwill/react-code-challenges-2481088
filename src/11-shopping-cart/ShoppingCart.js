@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 
 const items = [{
   name: 'apple',
@@ -11,8 +11,40 @@ const items = [{
   price: 3.99
 }]
 
+
+
 function ShoppingCart () {
-  const cart = [{ name: 'apple', quantity: 3, price: 0.39 }]
+//  const cart = [{ name: 'apple', quantity: 3, price: 0.39 }]
+  const [carts, setCarts] = useState([])
+
+  const AddToCart = (item) => {
+    const cartCopy = [...carts]
+    const itemInCart = cartCopy.find(e => e.name === item.name)
+    if(itemInCart){
+      itemInCart.quantity+=1
+      setCarts(cartCopy)
+    }else{
+      setCarts(() => [...carts, {...item, quantity:1}])
+
+    }
+    
+  }
+
+  const add = (name) => {
+   const cartCopy = [...carts]
+   const findName = cartCopy.find(e => e.name === name)
+   findName.quantity+=1
+   setCarts(cartCopy)
+    }
+  
+  const subTrack = (name) => {
+    const cartCopy = [...carts]
+    const findName = cartCopy.find(e => e.name === name)
+    findName.quantity-=1
+    setCarts(cartCopy)
+      }
+
+
 
   return (
     <div>
@@ -24,19 +56,19 @@ function ShoppingCart () {
             <div key={item.name}>
               <h3>{item.name}</h3>
               <p>${item.price}</p>
-              <button>Add to Cart</button>
+              <button  onClick={() => AddToCart(item)}>Add to Cart</button>
             </div>)
           )}
         </div>
         <div>
           <h2>Cart</h2>
-          {cart.map(item => (
+          {carts.map(item => (
             <div key={item.name}>
               <h3>{item.name}</h3>
               <p>
-                <button>-</button>
+                <button onClick={() => subTrack(item.name)}>-</button>
                 {item.quantity}
-                <button>+</button>
+                <button  onClick={() => add(item.name)}>+</button>
               </p>
               <p>Subtotal: ${item.quantity * item.price}</p>
             </div>
@@ -44,7 +76,7 @@ function ShoppingCart () {
         </div>
       </div>
       <div className='total'>
-        <h2>Total: $0.00</h2>
+        <h2>Total: ${carts.reduce((item,initial) => ((initial.quantity * initial.price)+item),0)}</h2>
       </div>
     </div>
   )
